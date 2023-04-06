@@ -1,4 +1,5 @@
 #pragma once
+#include "AIHelpDefine.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnAIHelpInitializedDelegate);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnUnreadMessageArrivedDelegate, int32);
@@ -20,13 +21,13 @@ public:
 	virtual void ResetUserInfo();
 	virtual void UpdateSDKLanguage(FString Language);
 	virtual void StartUnreadMessageCountPolling(FOnUnreadMessageArrivedDelegate Delegate);
-	virtual void SetPushTokenAndPlatform(FString PushToken, int32 Platform);
+	virtual void SetPushTokenAndPlatform(FString PushToken, EAIHelpPushPlatform Platform);
 	virtual void SetUploadLogPath(FString Path);
 	virtual FString GetSDKVersion();
 	virtual bool IsAIHelpShowing();
 	virtual void EnableLogging(bool Enable);
 	virtual void ShowUrl(FString Url);
-	virtual void AdditionalSupportFor(int32 CountryOrRegion);
+	virtual void AdditionalSupportFor(EAIHelpPublishCountryOrRegion CountryOrRegion);
 	virtual void SetOnSpecificUrlClickedCallback(FOnSpecificUrlClickedDelegate Delegate);
 	virtual void SetOnSpecificFormSubmittedCallback(FOnSpecificFormSubmittedDelegate Delegate);
 	virtual void SetOnAIHelpSessionOpenCallback(FOnAIHelpSessionOpenDelegate Delegate);

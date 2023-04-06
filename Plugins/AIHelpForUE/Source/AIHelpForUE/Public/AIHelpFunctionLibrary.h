@@ -6,24 +6,8 @@
 #if PLATFORM_ANDROID
 #include "UObject/Object.h"
 #endif
-// #include "AIHelpDefine.h"
+#include "AIHelpDefine.h"
 #include "AIHelpFunctionLibrary.generated.h"
-
-UENUM()
-enum EAIHelpPushPlatform
-{
-	Apns = 1,
-	Firebase = 2,
-	JPush = 3,
-	GeTui = 4
-};
-
-UENUM()
-enum EAIHelpPublishCountryOrRegion
-{
-	China = 1,
-	India = 2
-};
 
 DECLARE_DYNAMIC_DELEGATE(FOnAIHelpInitializedCallback);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnUnreadMessageArrivedCallback, int32, UnreadCount);

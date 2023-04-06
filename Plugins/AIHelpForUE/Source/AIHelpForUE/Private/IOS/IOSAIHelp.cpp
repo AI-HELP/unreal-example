@@ -105,7 +105,7 @@ void FIOSAIHelp::UpdateSDKLanguage(FString Language)
 #endif
 }
 
-void FIOSAIHelp::SetPushTokenAndPlatform(FString PushToken, int32 Platform)
+void FIOSAIHelp::SetPushTokenAndPlatform(FString PushToken, EAIHelpPushPlatform Platform)
 {
 #if PLATFORM_IOS
 	dispatch_async(dispatch_get_main_queue(), ^ {
@@ -175,7 +175,7 @@ void FIOSAIHelp::ShowUrl(FString Url)
 #endif
 }
 
-void FIOSAIHelp::AdditionalSupportFor(int32 CountryOrRegion)
+void FIOSAIHelp::AdditionalSupportFor(EAIHelpPublishCountryOrRegion CountryOrRegion)
 {
 #if PLATFORM_IOS
 	AIHelpPublishCountryOrRegion tmpCountryOrRegion = AIHelpCN;

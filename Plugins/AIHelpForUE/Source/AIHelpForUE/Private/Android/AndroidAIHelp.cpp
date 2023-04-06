@@ -174,7 +174,7 @@ void FAndroidAIHelp::UpdateSDKLanguage(FString language)
 	}
 }
 
-void FAndroidAIHelp::SetPushTokenAndPlatform(FString pushToken, int32 platform)
+void FAndroidAIHelp::SetPushTokenAndPlatform(FString pushToken, EAIHelpPushPlatform platform)
 {
 	if (JNIEnv* Env = FAndroidApplication::GetJavaEnv())
 	{
@@ -230,7 +230,7 @@ void FAndroidAIHelp::ShowUrl(FString url)
 	}
 }
 
-void FAndroidAIHelp::AdditionalSupportFor(int32 countryOrRegion)
+void FAndroidAIHelp::AdditionalSupportFor(EAIHelpPublishCountryOrRegion countryOrRegion)
 {
 	if (JNIEnv* Env = FAndroidApplication::GetJavaEnv())
 	{

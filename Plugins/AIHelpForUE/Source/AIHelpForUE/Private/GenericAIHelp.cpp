@@ -33,7 +33,7 @@ void FGenericAIHelp::UpdateSDKLanguage(FString Language)
 	
 }
 
-void FGenericAIHelp::SetPushTokenAndPlatform(FString PushToken, int32 Platform)
+void FGenericAIHelp::SetPushTokenAndPlatform(FString PushToken, EAIHelpPushPlatform Platform)
 {
 	
 }
@@ -63,7 +63,7 @@ void FGenericAIHelp::ShowUrl(FString url)
 	
 }
 
-void FGenericAIHelp::AdditionalSupportFor(int32 CountryOrRegion)
+void FGenericAIHelp::AdditionalSupportFor(EAIHelpPublishCountryOrRegion CountryOrRegion)
 {
 	
 }

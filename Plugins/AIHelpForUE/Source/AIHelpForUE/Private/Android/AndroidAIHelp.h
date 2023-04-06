@@ -21,13 +21,13 @@ public:
 	virtual void UpdateUserInfo(FString UserId, FString UserName, FString ServerId, FString UserTags, FString CustomDataInJsonFormat, bool IsSyncCrmInfo) override;
 	virtual void ResetUserInfo() override;
 	virtual void UpdateSDKLanguage(FString Language) override;
-	virtual void SetPushTokenAndPlatform(FString PushToken, int32 Platform) override;
+	virtual void SetPushTokenAndPlatform(FString PushToken, EAIHelpPushPlatform Platform) override;
 	virtual void SetUploadLogPath(FString LogPath) override;
 	virtual FString GetSDKVersion() override;
 	virtual bool IsAIHelpShowing() override;
 	virtual void EnableLogging(bool Enable) override;
 	virtual void ShowUrl(FString Url) override;
-	virtual void AdditionalSupportFor(int32 CountryOrRegion) override;
+	virtual void AdditionalSupportFor(EAIHelpPublishCountryOrRegion CountryOrRegion) override;
 	virtual void SetOnAIHelpInitializedCallback(FOnAIHelpInitializedDelegate Callback) override;
 	virtual void StartUnreadMessageCountPolling(FOnUnreadMessageArrivedDelegate Callback) override;
 	virtual void SetOnSpecificUrlClickedCallback(FOnSpecificUrlClickedDelegate Callback) override;

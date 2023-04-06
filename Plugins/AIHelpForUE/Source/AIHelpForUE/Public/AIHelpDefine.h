@@ -1,19 +1,23 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogAIHelp, Log, All);
 
-// DECLARE_MULTICAST_DELEGATE(FOnAIHelpInitializedDelegate);
-// DECLARE_MULTICAST_DELEGATE_OneParam(FOnUnreadMessageArrivedDelegate, int32);
-// DECLARE_MULTICAST_DELEGATE_OneParam(FOnSpecificUrlClickedDelegate, FString);
-// DECLARE_MULTICAST_DELEGATE(FOnSpecificFormSubmittedDelegate);
-// DECLARE_MULTICAST_DELEGATE(FOnAIHelpSessionOpenDelegate);
-// DECLARE_MULTICAST_DELEGATE(FOnAIHelpSessionCloseDelegate);
+UENUM()
+enum EAIHelpPushPlatform
+{
+	Apns = 1,
+	Firebase = 2,
+	JPush = 3,
+	GeTui = 4,
+	HuaWei = 6,
+};
 
-// DECLARE_DYNAMIC_DELEGATE(FOnAIHelpInitializedDelegate);
-// DECLARE_DYNAMIC_DELEGATE_OneParam(FOnUnreadMessageArrivedDelegate, int32, UnreadCount);
-// DECLARE_DYNAMIC_DELEGATE_OneParam(FOnSpecificUrlClickedDelegate, FString, Url);
-// DECLARE_DYNAMIC_DELEGATE(FOnSpecificFormSubmittedDelegate);
-// DECLARE_DYNAMIC_DELEGATE(FOnAIHelpSessionOpenDelegate);
-// DECLARE_DYNAMIC_DELEGATE(FOnAIHelpSessionCloseDelegate);
+UENUM()
+enum EAIHelpPublishCountryOrRegion
+{
+	China = 1,
+	India = 2
+};
