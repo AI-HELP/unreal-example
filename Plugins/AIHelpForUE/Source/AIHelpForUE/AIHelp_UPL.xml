@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <gameActivityImportAdditions>
+        <insert>
+			import net.aihelp.config.ApiConfig;
+			import net.aihelp.config.UserConfig;
+			import net.aihelp.config.enums.PublishCountryOrRegion;
+			import net.aihelp.config.enums.PushPlatform;
+			import net.aihelp.exception.AIHelpInitException;
+			import net.aihelp.init.AIHelpSupport;
+			import net.aihelp.ui.listener.OnAIHelpInitializedCallback;
+			import net.aihelp.ui.listener.OnAIHelpSessionCloseCallback;
+			import net.aihelp.ui.listener.OnAIHelpSessionOpenCallback;
+			import net.aihelp.ui.listener.OnMessageCountArrivedCallback;
+			import net.aihelp.ui.listener.OnNetworkCheckResultCallback;
+			import net.aihelp.ui.listener.OnSpecificFormSubmittedCallback;
+			import net.aihelp.ui.listener.OnSpecificUrlClickedCallback;
+			import net.aihelp.init.CallbackHelper;
+        </insert>
+    </gameActivityImportAdditions>
+
+    <buildGradleAdditions>
+        <insert>
+            android {
+				compileOptions {
+					sourceCompatibility 1.8
+					targetCompatibility 1.8
+				}
+            }
+            dependencies {
+            	implementation 'net.aihelp:android-aihelp-aar:4.2.+'
+            }
+        </insert>
+    </buildGradleAdditions>
+
+    <gameActivityOnCreateAdditions>
+        <insert>
+        </insert>
+    </gameActivityOnCreateAdditions>
+
+    <gameActivityClassAdditions>
+        <insert>
+			public native void nativeOnAIHelpInitializedCallback(boolean success, String msg);
+
+			public native void nativeOnAIHelpUnreadMessageArrivedCallback(int unreadMessageCount);
+
+			public native void nativeOnAIHelpSpecificUrlClickedCallback(String url);
+
+			public native void nativeOnAIHelpSpecificFormSubmittedCallback();
+
+			public native void nativeOnAIHelpSessionOpenCallback();
+
+			public native void nativeOnAIHelpSessionCloseCallback();
+
+			public void AIHelpInit(String appKey, String domain, String appId, String language) {
+				try {
+					AIHelpSupport.init(this, appKey, domain, appId, language);
+				} catch (AIHelpInitException e) {
+					nativeOnAIHelpInitializedCallback(false, e.getMessage());
+				}
+			}
+
+			public void AIHelpSetOnAIHelpInitializedCallback() {
+				AIHelpSupport.setOnAIHelpInitializedCallback(new OnAIHelpInitializedCallback() {
+					@Override
+					public void onAIHelpInitialized() {
+						nativeOnAIHelpInitializedCallback(true, "");
+					}
+				});
+			}			
+			
+			public void AIHelpStartUnreadMessageCountPolling() {
+				AIHelpSupport.startUnreadMessageCountPolling(new OnMessageCountArrivedCallback() {
+					@Override
+					public void onMessageCountArrived(int msgCount) {
+						nativeOnAIHelpUnreadMessageArrivedCallback(msgCount);
+					}
+				});
+			}			
+			
+			public void AIHelpSetOnSpecificFormSubmittedCallback() {
+				AIHelpSupport.setOnSpecificFormSubmittedCallback(new OnSpecificFormSubmittedCallback() {
+					@Override
+					public void onFormSubmitted() {
+						nativeOnAIHelpSpecificFormSubmittedCallback();
+					}
+				});
+			}
+			
+			public void AIHelpSetOnAIHelpSessionOpenCallback() {
+				AIHelpSupport.setOnAIHelpSessionOpenCallback(new OnAIHelpSessionOpenCallback() {
+					@Override
+					public void onAIHelpSessionOpened() {
+						nativeOnAIHelpSessionOpenCallback();
+					}
+				});
+			}
+			
+			public void AIHelpSetOnAIHelpSessionCloseCallback() {
+				AIHelpSupport.setOnAIHelpSessionCloseCallback(new OnAIHelpSessionCloseCallback() {
+					@Override
+					public void onAIHelpSessionClosed() {
+						nativeOnAIHelpSessionCloseCallback();
+					}
+				});
+			}
+		
+			public void AIHelpSetOnSpecificUrlClickedCallback() {
+				AIHelpSupport.setOnSpecificUrlClickedCallback(new OnSpecificUrlClickedCallback() {
+					@Override
+					public void onSpecificUrlClicked(String url) {
+						nativeOnAIHelpSpecificUrlClickedCallback(url);
+					}
+				});
+			}
+
+			public void AIHelpShow(String entranceId, String welcomeMessage) {
+				ApiConfig apiConfig = new ApiConfig.Builder()
+					.setEntranceId(entranceId)
+					.setWelcomeMessage(welcomeMessage)
+					.build();
+				AIHelpSupport.show(apiConfig);
+			}
+
+			public void AIHelpUpdateUserInfo(String userId, String userName, String serverId, String userTags, String customData, boolean isSyncCrmInfo) {
+				UserConfig userConfig = new UserConfig.Builder()
+					.setUserId(userId)
+					.setUserName(userName)
+					.setServerId(serverId)
+					.setUserTags(userTags)
+					.setCustomData(customData)
+					.setSyncCrmInfo(isSyncCrmInfo)
+					.build();
+				AIHelpSupport.updateUserInfo(userConfig);
+			}
+
+			public void AIHelpResetUserInfo() {
+				AIHelpSupport.resetUserInfo();
+			}
+
+			public void AIHelpUpdateSDKLanguage(String language) {
+				AIHelpSupport.updateSDKLanguage(language);
+			}
+
+			public void AIHelpSetPushTokenAndPlatform(String pushToken, int pushPlatform) {
+				AIHelpSupport.setPushTokenAndPlatform(pushToken, PushPlatform.fromValue(pushPlatform));
+			}
+
+			public void AIHelpSetUploadLogPath(String logPath) {
+				AIHelpSupport.setUploadLogPath(logPath);
+			}
+
+			public String AIHelpGetSDKVersion() {
+				return AIHelpSupport.getSDKVersion();
+			}
+
+			public boolean AIHelpIsAIHelpShowing() {
+				return AIHelpSupport.isAIHelpShowing();
+			}
+
+			public void AIHelpEnableLogging(boolean enable) {
+				AIHelpSupport.enableLogging(enable);
+			}
+
+			public void AIHelpShowUrl(String url) {
+				AIHelpSupport.showUrl(url);
+			}
+
+			public void AIHelpAdditionalSupportFor(int countryOrRegion) {
+				AIHelpSupport.additionalSupportFor(PublishCountryOrRegion.fromValue(countryOrRegion));
+			}
+			
+        </insert>
+    </gameActivityClassAdditions>
+</root>
