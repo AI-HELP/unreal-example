@@ -45,17 +45,125 @@ void FIOSAIHelp::Init(FString AppKey, FString Domain, FString AppId, FString Lan
 #endif
 }
 
-void FIOSAIHelp::Show(FString EntranceId, FString WelcomeMessage)
+void FIOSAIHelp::ShowConversation(EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
 {
 #if PLATFORM_IOS
 	dispatch_async(dispatch_get_main_queue(), ^ {
-		AIHelpApiConfigBuilder *configBuilder = [[AIHelpApiConfigBuilder alloc] init];
-		configBuilder.entranceId = FStringToNSString(EntranceId);
-		configBuilder.welcomeMessage = FStringToNSString(WelcomeMessage);
-		[AIHelpSupportSDK showWithApiConfig:configBuilder.build];
+		AIHelpConversationConfigBuilder *conversationBuilder = [[AIHelpConversationConfigBuilder alloc] init];
+		conversationBuilder.conversationIntent = ConversationIntent == 1 ? AIHelpConversationIntentBotSupport : AIHelpConversationIntentHumanSupport;
+		conversationBuilder.alwaysShowHumanSupportButtonInBotPage = AlwaysShowHumanSupportButtonInBotPage;
+        conversationBuilder.welcomeMessage = FStringToNSString(WelcomeMessage);
+        conversationBuilder.storyNode = FStringToNSString(StoryNode);
+        [AIHelpSupportSDK showConversation:conversationBuilder.build];
 	});
 #endif
 }
+
+void FIOSAIHelp::ShowAllFAQSections(EAIHelpConversationMoment ConversationMoment, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
+{
+#if PLATFORM_IOS
+	dispatch_async(dispatch_get_main_queue(), ^ {
+		AIHelpFAQConfigBuilder *faqBuilder = [[AIHelpFAQConfigBuilder alloc] init];
+        if (ConversationMoment == 1) {
+            faqBuilder.showConversationMoment = AIHelpFAQShowConversationMomentAlways;
+        } else if (ConversationMoment == 2) {
+			faqBuilder.showConversationMoment = AIHelpFAQShowConversationMomentOnlyInAnswerPage;
+		} else if (ConversationMoment == 3) {
+            faqBuilder.showConversationMoment = AIHelpFAQShowConversationMomentAfterMarkingUnhelpful;
+        }  else {
+            faqBuilder.showConversationMoment = AIHelpFAQShowConversationMomentNever;
+        }
+        AIHelpConversationConfigBuilder *conversationBuilder = [[AIHelpConversationConfigBuilder alloc] init];
+        conversationBuilder.conversationIntent = ConversationIntent == 1 ? AIHelpConversationIntentBotSupport : AIHelpConversationIntentHumanSupport;
+        conversationBuilder.alwaysShowHumanSupportButtonInBotPage = AlwaysShowHumanSupportButtonInBotPage;
+        conversationBuilder.storyNode = FStringToNSString(StoryNode);
+        conversationBuilder.welcomeMessage = FStringToNSString(WelcomeMessage);
+        faqBuilder.conversationConfig = conversationBuilder.build;
+        [AIHelpSupportSDK showAllFAQSections:faqBuilder.build];
+	});
+#endif
+}
+
+void FIOSAIHelp::ShowFAQSection(FString SectionId, EAIHelpConversationMoment ConversationMoment, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
+{
+#if PLATFORM_IOS
+	dispatch_async(dispatch_get_main_queue(), ^ {
+		AIHelpFAQConfigBuilder *faqBuilder = [[AIHelpFAQConfigBuilder alloc] init];
+		if (ConversationMoment == 1) {
+			faqBuilder.showConversationMoment = AIHelpFAQShowConversationMomentAlways;
+		} else if (ConversationMoment == 2) {
+			faqBuilder.showConversationMoment = AIHelpFAQShowConversationMomentOnlyInAnswerPage;
+		} else if (ConversationMoment == 3) {
+			faqBuilder.showConversationMoment = AIHelpFAQShowConversationMomentAfterMarkingUnhelpful;
+		}  else {
+			faqBuilder.showConversationMoment = AIHelpFAQShowConversationMomentNever;
+		}
+        AIHelpConversationConfigBuilder *conversationBuilder = [[AIHelpConversationConfigBuilder alloc] init];
+        conversationBuilder.conversationIntent = ConversationIntent == 1 ? AIHelpConversationIntentBotSupport : AIHelpConversationIntentHumanSupport;
+        conversationBuilder.alwaysShowHumanSupportButtonInBotPage = AlwaysShowHumanSupportButtonInBotPage;
+        conversationBuilder.storyNode = FStringToNSString(StoryNode);
+        conversationBuilder.welcomeMessage = FStringToNSString(WelcomeMessage);
+        faqBuilder.conversationConfig = conversationBuilder.build;
+        [AIHelpSupportSDK showFAQSection:FStringToNSString(SectionId) config:faqBuilder.build];
+	});
+#endif
+}
+
+void FIOSAIHelp::ShowSingleFAQ(FString FaqId, EAIHelpConversationMoment ConversationMoment, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
+{
+#if PLATFORM_IOS
+	dispatch_async(dispatch_get_main_queue(), ^ {
+		AIHelpFAQConfigBuilder *faqBuilder = [[AIHelpFAQConfigBuilder alloc] init];
+		if (ConversationMoment == 1) {
+			faqBuilder.showConversationMoment = AIHelpFAQShowConversationMomentAlways;
+		} else if (ConversationMoment == 2) {
+			faqBuilder.showConversationMoment = AIHelpFAQShowConversationMomentOnlyInAnswerPage;
+		} else if (ConversationMoment == 3) {
+			faqBuilder.showConversationMoment = AIHelpFAQShowConversationMomentAfterMarkingUnhelpful;
+		}  else {
+			faqBuilder.showConversationMoment = AIHelpFAQShowConversationMomentNever;
+		}
+        AIHelpConversationConfigBuilder *conversationBuilder = [[AIHelpConversationConfigBuilder alloc] init];
+        conversationBuilder.conversationIntent = ConversationIntent == 1 ? AIHelpConversationIntentBotSupport : AIHelpConversationIntentHumanSupport;
+        conversationBuilder.alwaysShowHumanSupportButtonInBotPage = AlwaysShowHumanSupportButtonInBotPage;
+        conversationBuilder.storyNode = FStringToNSString(StoryNode);
+        conversationBuilder.welcomeMessage = FStringToNSString(WelcomeMessage);
+        faqBuilder.conversationConfig = conversationBuilder.build;
+        [AIHelpSupportSDK showSingleFAQ:FStringToNSString(FaqId) config:faqBuilder.build];
+	});
+#endif
+}
+
+void FIOSAIHelp::ShowOperation(int32 SelectIndex, FString ConversationTitle, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
+{
+#if PLATFORM_IOS
+	dispatch_async(dispatch_get_main_queue(), ^ {
+		AIHelpOperationConfigBuilder *operationBuiler = [[AIHelpOperationConfigBuilder alloc] init];
+        operationBuiler.selectIndex = SelectIndex;
+        operationBuiler.conversationTitle = FStringToNSString(ConversationTitle);
+        AIHelpConversationConfigBuilder *conversationBuilder = [[AIHelpConversationConfigBuilder alloc] init];
+        conversationBuilder.conversationIntent = ConversationIntent == 1 ? AIHelpConversationIntentBotSupport : AIHelpConversationIntentHumanSupport;
+        conversationBuilder.alwaysShowHumanSupportButtonInBotPage = AlwaysShowHumanSupportButtonInBotPage;
+        conversationBuilder.storyNode = FStringToNSString(StoryNode);
+        conversationBuilder.welcomeMessage = FStringToNSString(WelcomeMessage);
+        operationBuiler.conversationConfig = conversationBuilder.build;
+        [AIHelpSupportSDK showOperation:operationBuiler.build];
+	});
+#endif
+}
+
+
+// void FIOSAIHelp::Show(FString EntranceId, FString WelcomeMessage)
+// {
+// #if PLATFORM_IOS
+// 	dispatch_async(dispatch_get_main_queue(), ^ {
+// 		AIHelpApiConfigBuilder *configBuilder = [[AIHelpApiConfigBuilder alloc] init];
+// 		configBuilder.entranceId = FStringToNSString(EntranceId);
+// 		configBuilder.welcomeMessage = FStringToNSString(WelcomeMessage);
+// 		[AIHelpSupportSDK showWithApiConfig:configBuilder.build];
+// 	});
+// #endif
+// }
 
 void FIOSAIHelp::UpdateUserInfo(FString UserId, FString UserName, FString ServerId, FString UserTags,
                                 FString CustomDataInJsonFormat, bool IsSyncCrmInfo)
@@ -80,7 +188,7 @@ void FIOSAIHelp::UpdateUserInfo(FString UserId, FString UserName, FString Server
 				userBuilder.customData = dic;
 			}
 		}
-		
+
 		userBuilder.isSyncCrmInfo = IsSyncCrmInfo;
 		[AIHelpSupportSDK updateUserInfo:userBuilder.build];
 	});
@@ -105,7 +213,7 @@ void FIOSAIHelp::UpdateSDKLanguage(FString Language)
 #endif
 }
 
-void FIOSAIHelp::SetPushTokenAndPlatform(FString PushToken, int32 Platform)
+void FIOSAIHelp::SetPushTokenAndPlatform(FString PushToken, EAIHelpPushPlatform Platform)
 {
 #if PLATFORM_IOS
 	dispatch_async(dispatch_get_main_queue(), ^ {
@@ -175,7 +283,7 @@ void FIOSAIHelp::ShowUrl(FString Url)
 #endif
 }
 
-void FIOSAIHelp::AdditionalSupportFor(int32 CountryOrRegion)
+void FIOSAIHelp::AdditionalSupportFor(EAIHelpPublishCountryOrRegion CountryOrRegion)
 {
 #if PLATFORM_IOS
 	AIHelpPublishCountryOrRegion tmpCountryOrRegion = AIHelpCN;
@@ -292,5 +400,23 @@ void FIOSAIHelp::SetOnAIHelpSessionCloseCallback(FOnAIHelpSessionCloseDelegate C
 	SessionCloseDelegate = Callback;
 #if PLATFORM_IOS
 	[AIHelpSupportSDK setOnAIHelpSessionCloseCallback: AIHelpOnAIHelpSessionCloseCallback];
+#endif
+}
+
+void AIHelpOnNetworkCheckCallback(const char* netLog)
+{
+	auto fNetLog = FString(UTF8_TO_TCHAR(netLog));
+	AsyncTask(ENamedThreads::GameThread, [fNetLog]()
+	{
+		FAIHelpForUEModule::Get().GetAIHelp()->GetAIHelpNetworkCheckDelegate().Broadcast(fNetLog);
+		UAIHelpFunctionLibrary::NetworkCheckCallback.ExecuteIfBound(fNetLog);
+	});
+}
+
+void FIOSAIHelp::SetNetworkCheckHostAddress(FString Address, FOnAIHelpNetworkCheckDelegate Delegate)
+{
+	NetworkCheckDelegate = Delegate;
+#if PLATFORM_IOS
+	[AIHelpSupportSDK setNetworkCheckHostAddress:FStringToNSString(Address) callback:AIHelpOnNetworkCheckCallback];
 #endif
 }

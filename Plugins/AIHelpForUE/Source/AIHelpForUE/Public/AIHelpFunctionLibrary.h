@@ -2,28 +2,12 @@
 
 #pragma once
 #include "CoreMinimal.h"
+#include "AIHelpDefine.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #if PLATFORM_ANDROID
 #include "UObject/Object.h"
 #endif
-// #include "AIHelpDefine.h"
 #include "AIHelpFunctionLibrary.generated.h"
-
-UENUM()
-enum EAIHelpPushPlatform
-{
-	Apns = 1,
-	Firebase = 2,
-	JPush = 3,
-	GeTui = 4
-};
-
-UENUM()
-enum EAIHelpPublishCountryOrRegion
-{
-	China = 1,
-	India = 2
-};
 
 DECLARE_DYNAMIC_DELEGATE(FOnAIHelpInitializedCallback);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnUnreadMessageArrivedCallback, int32, UnreadCount);
@@ -31,6 +15,7 @@ DECLARE_DYNAMIC_DELEGATE_OneParam(FOnSpecificUrlClickedCallback, FString, Url);
 DECLARE_DYNAMIC_DELEGATE(FOnSpecificFormSubmittedCallback);
 DECLARE_DYNAMIC_DELEGATE(FOnAIHelpSessionOpenCallback);
 DECLARE_DYNAMIC_DELEGATE(FOnAIHelpSessionCloseCallback);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FOnAIHelpNetworkCheckCallback, FString, NetLog);
 
 UCLASS()
 class AIHELPFORUE_API UAIHelpFunctionLibrary final : public UBlueprintFunctionLibrary
@@ -46,7 +31,19 @@ public:
 	static void SetOnAIHelpInitializedCallback(FOnAIHelpInitializedCallback Callback);
 
 	UFUNCTION(BlueprintCallable, Category = "AIHelp")
-	static void Show(FString EntranceId, FString WelcomeMessage);
+	static void ShowConversation(EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode);
+
+	UFUNCTION(BlueprintCallable, Category = "AIHelp")
+	static void ShowAllFAQSections(EAIHelpConversationMoment ConversationMoment, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode);
+	
+	UFUNCTION(BlueprintCallable, Category = "AIHelp")
+	static void ShowSingleFAQ(FString FaqId, EAIHelpConversationMoment ConversationMoment, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode);
+
+	UFUNCTION(BlueprintCallable, Category = "AIHelp")
+	static void ShowFAQSection(FString SectionId, EAIHelpConversationMoment ConversationMoment, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode);
+	
+	UFUNCTION(BlueprintCallable, Category = "AIHelp")
+	static void ShowOperation(int32 SelectIndex, FString ConversationTitle, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode);
 
 	UFUNCTION(BlueprintCallable, Category = "AIHelp")
 	static void UpdateUserInfo(FString UserId, FString UserName, FString ServerId, FString UserTags,
@@ -93,6 +90,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "AIHelp")
 	static void SetOnAIHelpSessionCloseCallback(FOnAIHelpSessionCloseCallback Callback);
 
+	UFUNCTION(BlueprintCallable, Category = "AIHelp")
+	static void SetNetworkCheckHostAddress(FString HostAddress, FOnAIHelpNetworkCheckCallback Callback);
+
 #pragma endregion
 
 	static FOnAIHelpInitializedCallback InitializedCallback;
@@ -101,5 +101,6 @@ public:
 	static FOnSpecificFormSubmittedCallback SpecificFormSubmittedCallback;
 	static FOnAIHelpSessionOpenCallback SessionOpenCallback;
 	static FOnAIHelpSessionCloseCallback SessionCloseCallback;
+	static FOnAIHelpNetworkCheckCallback NetworkCheckCallback;
 	
 };

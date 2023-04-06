@@ -9,6 +9,7 @@ FOnSpecificUrlClickedCallback UAIHelpFunctionLibrary::SpecificUrlClickedCallback
 FOnSpecificFormSubmittedCallback UAIHelpFunctionLibrary::SpecificFormSubmittedCallback;
 FOnAIHelpSessionOpenCallback UAIHelpFunctionLibrary::SessionOpenCallback;
 FOnAIHelpSessionCloseCallback UAIHelpFunctionLibrary::SessionCloseCallback;
+FOnAIHelpNetworkCheckCallback UAIHelpFunctionLibrary::NetworkCheckCallback;
 
 #pragma region AIHelp Function
 void UAIHelpFunctionLibrary::Init(FString AppKey, FString Domain, FString AppId, FString Language)
@@ -16,9 +17,34 @@ void UAIHelpFunctionLibrary::Init(FString AppKey, FString Domain, FString AppId,
 	FAIHelpForUEModule::Get().GetAIHelp()->Init(AppKey, Domain, AppId, Language);
 }
 
-void UAIHelpFunctionLibrary::Show(FString EntranceId, FString WelcomeMessage)
+void UAIHelpFunctionLibrary::ShowConversation(EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
 {
-	FAIHelpForUEModule::Get().GetAIHelp()->Show(EntranceId, WelcomeMessage);
+	FAIHelpForUEModule::Get().GetAIHelp()->ShowConversation(ConversationIntent,
+		AlwaysShowHumanSupportButtonInBotPage, WelcomeMessage, StoryNode);
+}
+
+void UAIHelpFunctionLibrary::ShowAllFAQSections(EAIHelpConversationMoment ConversationMoment, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
+{
+	FAIHelpForUEModule::Get().GetAIHelp()->ShowAllFAQSections(ConversationMoment, ConversationIntent,
+		AlwaysShowHumanSupportButtonInBotPage, WelcomeMessage, StoryNode);
+}
+	
+void UAIHelpFunctionLibrary::ShowSingleFAQ(FString FaqId, EAIHelpConversationMoment ConversationMoment, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
+{
+	FAIHelpForUEModule::Get().GetAIHelp()->ShowSingleFAQ(FaqId, ConversationMoment,
+		ConversationIntent, AlwaysShowHumanSupportButtonInBotPage, WelcomeMessage, StoryNode);
+}
+
+void UAIHelpFunctionLibrary::ShowFAQSection(FString SectionId, EAIHelpConversationMoment ConversationMoment, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
+{
+	FAIHelpForUEModule::Get().GetAIHelp()->ShowFAQSection(SectionId, ConversationMoment,
+		ConversationIntent, AlwaysShowHumanSupportButtonInBotPage, WelcomeMessage, StoryNode);
+}
+	
+void UAIHelpFunctionLibrary::ShowOperation(int32 SelectIndex, FString ConversationTitle, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
+{
+	FAIHelpForUEModule::Get().GetAIHelp()->ShowOperation(SelectIndex, ConversationTitle,
+		ConversationIntent, AlwaysShowHumanSupportButtonInBotPage, WelcomeMessage, StoryNode);
 }
 
 void UAIHelpFunctionLibrary::UpdateUserInfo(FString UserId, FString UserName, FString ServerId, FString UserTags,
@@ -107,6 +133,12 @@ void UAIHelpFunctionLibrary::SetOnAIHelpSessionCloseCallback(FOnAIHelpSessionClo
 {
 	SessionCloseCallback = Callback;
 	FAIHelpForUEModule::Get().GetAIHelp()->SetOnAIHelpSessionCloseCallback(FOnAIHelpSessionCloseDelegate());
+}
+
+void UAIHelpFunctionLibrary::SetNetworkCheckHostAddress(FString HostAddress, FOnAIHelpNetworkCheckCallback Callback)
+{
+	NetworkCheckCallback = Callback;
+	FAIHelpForUEModule::Get().GetAIHelp()->SetNetworkCheckHostAddress(HostAddress, FOnAIHelpNetworkCheckDelegate());
 }
 
 #pragma endregion

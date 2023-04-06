@@ -2,17 +2,40 @@
 
 FGenericAIHelp::FGenericAIHelp()
 {
+	
 }
 
 FGenericAIHelp::~FGenericAIHelp()
 {
+	
 }
 
 void FGenericAIHelp::Init(FString AppKey, FString Domain, FString AppId, FString Language)
 {
+	
 }
 
-void FGenericAIHelp::Show(FString EntranceId, FString WelcomeMessage)
+void FGenericAIHelp::ShowConversation(EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
+{
+	
+}
+
+void FGenericAIHelp::ShowAllFAQSections(EAIHelpConversationMoment ConversationMoment, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
+{
+	
+}
+
+void FGenericAIHelp::ShowSingleFAQ(FString FaqId, EAIHelpConversationMoment ConversationMoment, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
+{
+	
+}
+
+void FGenericAIHelp::ShowFAQSection(FString SectionId, EAIHelpConversationMoment ConversationMoment, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
+{
+	
+}
+
+void FGenericAIHelp::ShowOperation(int32 SelectIndex, FString ConversationTitle, EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode)
 {
 	
 }
@@ -33,7 +56,7 @@ void FGenericAIHelp::UpdateSDKLanguage(FString Language)
 	
 }
 
-void FGenericAIHelp::SetPushTokenAndPlatform(FString PushToken, int32 Platform)
+void FGenericAIHelp::SetPushTokenAndPlatform(FString PushToken, EAIHelpPushPlatform Platform)
 {
 	
 }
@@ -63,7 +86,7 @@ void FGenericAIHelp::ShowUrl(FString url)
 	
 }
 
-void FGenericAIHelp::AdditionalSupportFor(int32 CountryOrRegion)
+void FGenericAIHelp::AdditionalSupportFor(EAIHelpPublishCountryOrRegion CountryOrRegion)
 {
 	
 }
@@ -98,6 +121,11 @@ void FGenericAIHelp::SetOnAIHelpSessionCloseCallback(FOnAIHelpSessionCloseDelega
 	SessionCloseDelegate = Delegate;
 }
 
+void FGenericAIHelp::SetNetworkCheckHostAddress(FString HostAddress, FOnAIHelpNetworkCheckDelegate Delegate)
+{
+	NetworkCheckDelegate = Delegate;
+}
+
 FOnAIHelpInitializedDelegate FGenericAIHelp::GetAIHelpInitializedDelegate()
 {
 	return InitDelegate;
@@ -126,4 +154,9 @@ FOnAIHelpSessionOpenDelegate FGenericAIHelp::GetAIHelpSessionOpenDelegate()
 FOnAIHelpSessionCloseDelegate FGenericAIHelp::GetAIHelpSessionCloseDelegate()
 {
 	return SessionCloseDelegate;
+}
+
+FOnAIHelpNetworkCheckDelegate FGenericAIHelp::GetAIHelpNetworkCheckDelegate()
+{
+	return NetworkCheckDelegate;
 }

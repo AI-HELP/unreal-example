@@ -10,21 +10,40 @@ public:
 	virtual ~FIOSAIHelp();
 
 	virtual void Init(FString AppKey, FString Domain, FString AppId, FString Language) override;
-	virtual void Show(FString EntranceId, FString WelcomeMessage) override;
-	virtual void UpdateUserInfo(FString UserId, FString UserName, FString ServerId, FString UserTags, FString CustomDataInJsonFormat, bool IsSyncCrmInfo) override;
+
+	virtual void ShowConversation(EAIHelpConversationIntent ConversationIntent,
+	                              bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage,
+	                              FString StoryNode) override;
+	virtual void ShowAllFAQSections(EAIHelpConversationMoment ConversationMoment,
+	                                EAIHelpConversationIntent ConversationIntent,
+	                                bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage,
+	                                FString StoryNode) override;
+	virtual void ShowSingleFAQ(FString FaqId, EAIHelpConversationMoment ConversationMoment,
+	                           EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage,
+	                           FString WelcomeMessage, FString StoryNode) override;
+	virtual void ShowFAQSection(FString SectionId, EAIHelpConversationMoment ConversationMoment,
+	                            EAIHelpConversationIntent ConversationIntent,
+	                            bool AlwaysShowHumanSupportButtonInBotPage, FString WelcomeMessage, FString StoryNode) override;
+	virtual void ShowOperation(int32 SelectIndex, FString ConversationTitle,
+	                           EAIHelpConversationIntent ConversationIntent, bool AlwaysShowHumanSupportButtonInBotPage,
+	                           FString WelcomeMessage, FString StoryNode) override;
+
+	virtual void UpdateUserInfo(FString UserId, FString UserName, FString ServerId, FString UserTags,
+	                            FString CustomDataInJsonFormat, bool IsSyncCrmInfo) override;
 	virtual void ResetUserInfo() override;
 	virtual void UpdateSDKLanguage(FString Language) override;
-	virtual void SetPushTokenAndPlatform(FString PushToken, int32 Platform) override;
+	virtual void SetPushTokenAndPlatform(FString PushToken, EAIHelpPushPlatform Platform) override;
 	virtual void SetUploadLogPath(FString LogPath) override;
 	virtual FString GetSDKVersion() override;
 	virtual bool IsAIHelpShowing() override;
 	virtual void EnableLogging(bool Enable) override;
 	virtual void ShowUrl(FString Url) override;
-	virtual void AdditionalSupportFor(int32 CountryOrRegion) override;
+	virtual void AdditionalSupportFor(EAIHelpPublishCountryOrRegion CountryOrRegion) override;
 	virtual void SetOnAIHelpInitializedCallback(FOnAIHelpInitializedDelegate Delegate) override;
 	virtual void StartUnreadMessageCountPolling(FOnUnreadMessageArrivedDelegate Delegate) override;
 	virtual void SetOnSpecificUrlClickedCallback(FOnSpecificUrlClickedDelegate Delegate) override;
 	virtual void SetOnSpecificFormSubmittedCallback(FOnSpecificFormSubmittedDelegate Delegate) override;
 	virtual void SetOnAIHelpSessionOpenCallback(FOnAIHelpSessionOpenDelegate Delegate) override;
 	virtual void SetOnAIHelpSessionCloseCallback(FOnAIHelpSessionCloseDelegate Delegate) override;
+	virtual void SetNetworkCheckHostAddress(FString Address, FOnAIHelpNetworkCheckDelegate Delegate) override;
 };

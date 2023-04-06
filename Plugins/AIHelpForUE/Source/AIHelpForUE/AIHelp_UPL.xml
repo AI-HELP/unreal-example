@@ -3,10 +3,14 @@
 
     <gameActivityImportAdditions>
         <insert>
-			import net.aihelp.config.ApiConfig;
 			import net.aihelp.config.UserConfig;
 			import net.aihelp.config.enums.PublishCountryOrRegion;
 			import net.aihelp.config.enums.PushPlatform;
+			import net.aihelp.config.ConversationConfig;
+			import net.aihelp.config.FaqConfig;
+			import net.aihelp.config.OperationConfig;
+			import net.aihelp.config.enums.ConversationIntent;
+			import net.aihelp.config.enums.ShowConversationMoment;
 			import net.aihelp.exception.AIHelpInitException;
 			import net.aihelp.init.AIHelpSupport;
 			import net.aihelp.ui.listener.OnAIHelpInitializedCallback;
@@ -16,6 +20,7 @@
 			import net.aihelp.ui.listener.OnNetworkCheckResultCallback;
 			import net.aihelp.ui.listener.OnSpecificFormSubmittedCallback;
 			import net.aihelp.ui.listener.OnSpecificUrlClickedCallback;
+			import net.aihelp.ui.listener.OnNetworkCheckResultCallback;
 			import net.aihelp.init.CallbackHelper;
         </insert>
     </gameActivityImportAdditions>
@@ -29,7 +34,7 @@
 				}
             }
             dependencies {
-            	implementation 'net.aihelp:android-aihelp-aar:4.2.+'
+            	implementation 'net.aihelp:android-aihelp-aar:3.3.9'
             }
         </insert>
     </buildGradleAdditions>
@@ -52,6 +57,8 @@
 			public native void nativeOnAIHelpSessionOpenCallback();
 
 			public native void nativeOnAIHelpSessionCloseCallback();
+
+			public native void nativeSetNetworkCheckHostAddress(String netLog);
 
 			public void AIHelpInit(String appKey, String domain, String appId, String language) {
 				try {
@@ -115,12 +122,84 @@
 				});
 			}
 
-			public void AIHelpShow(String entranceId, String welcomeMessage) {
-				ApiConfig apiConfig = new ApiConfig.Builder()
-					.setEntranceId(entranceId)
+			private ConversationConfig getConversationConfig(int conversationIntent, boolean alwaysShowHuman,
+			String welcomeMessage, String storyNode) {
+				ConversationIntent intent = conversationIntent == 1 ? ConversationIntent.BOT_SUPPORT : ConversationIntent.HUMAN_SUPPORT;
+				ConversationConfig.Builder builder = new ConversationConfig.Builder()
+					.setConversationIntent(intent)
+					.setAlwaysShowHumanSupportButtonInBotPage(alwaysShowHuman)
 					.setWelcomeMessage(welcomeMessage)
+					.setStoryNode(storyNode);
+				return builder.build();
+			}
+
+			private FaqConfig getFaqConfig(int showConversationMoment, int conversationIntent,
+				boolean alwaysShowHuman, String welcomeMessage, String storyNode) {
+				ShowConversationMoment showMoment = ShowConversationMoment.NEVER;
+				switch (showConversationMoment) {
+					case 0:
+						showMoment = ShowConversationMoment.NEVER;
+						break;
+					case 1:
+						showMoment = ShowConversationMoment.ALWAYS;
+						break;
+					case 2:
+						showMoment = ShowConversationMoment.ONLY_IN_ANSWER_PAGE;
+						break;
+					case 3:
+						showMoment = ShowConversationMoment.AFTER_MARKING_UNHELPFUL;
+						break;
+					default:
+						break;
+				}
+				ConversationConfig conversationConfig = getConversationConfig(conversationIntent, alwaysShowHuman, welcomeMessage, storyNode);
+				FaqConfig.Builder faqConfig = new FaqConfig.Builder().setShowConversationMoment(showMoment)
+					.setConversationConfig(conversationConfig);
+				return faqConfig.build();
+			}
+
+			public void AIHelpShowConversation(int conversationIntent, boolean alwaysShowHuman,
+							String welcomeMessage, String storyNode) {
+				AIHelpSupport.showConversation(getConversationConfig(conversationIntent, alwaysShowHuman, welcomeMessage, storyNode));
+			}
+
+			public void AIHelpShowAllFAQSections(int showConversationMoment, int conversationIntent,
+						boolean alwaysShowHuman, String welcomeMessage, String storyNode) {
+				FaqConfig faqConfig = getFaqConfig(showConversationMoment, conversationIntent, alwaysShowHuman, welcomeMessage, storyNode);
+				AIHelpSupport.showAllFAQSections(faqConfig);
+			}
+
+			public void AIHelpShowFAQSection(String sectionId, int showConversationMoment, int conversationIntent,
+						boolean alwaysShowHuman, String welcomeMessage, String storyNode) {
+				FaqConfig faqConfig = getFaqConfig(showConversationMoment, conversationIntent,
+						alwaysShowHuman, welcomeMessage, storyNode);
+				AIHelpSupport.showFAQSection(sectionId, faqConfig);
+			}
+
+			public void AIHelpShowSingleFAQ(String faqId, int showConversationMoment, int conversationIntent,
+						boolean alwaysShowHuman, String welcomeMessage, String storyNode) {
+				FaqConfig faqConfig = getFaqConfig(showConversationMoment, conversationIntent,
+					alwaysShowHuman, welcomeMessage, storyNode);
+				AIHelpSupport.showSingleFAQ(faqId, faqConfig);
+			}
+
+			public void AIHelpShowOperation(int selectIndex, String conversationTitle, int conversationIntent,
+						boolean alwaysShowHuman, String welcomeMessage, String storyNode) {
+				OperationConfig operationConfig = new OperationConfig.Builder()
+					.setSelectIndex(selectIndex)
+					.setConversationTitle(conversationTitle)
+					.setConversationConfig(getConversationConfig(conversationIntent, alwaysShowHuman, welcomeMessage, storyNode))
 					.build();
-				AIHelpSupport.show(apiConfig);
+				AIHelpSupport.showOperation(operationConfig);
+			}
+
+			public void AIHelpSetNetworkCheckHostAddress(String hostAddress) {
+				AIHelpSupport.setNetworkCheckHostAddress(hostAddress, new OnNetworkCheckResultCallback() {
+					@Override
+					public void onNetworkCheckResult(String netLog) {
+						nativeSetNetworkCheckHostAddress(netLog);
+					}
+				});
 			}
 
 			public void AIHelpUpdateUserInfo(String userId, String userName, String serverId, String userTags, String customData, boolean isSyncCrmInfo) {
