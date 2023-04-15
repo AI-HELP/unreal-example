@@ -7,6 +7,7 @@
 			import net.aihelp.config.UserConfig;
 			import net.aihelp.config.enums.PublishCountryOrRegion;
 			import net.aihelp.config.enums.PushPlatform;
+			import net.aihelp.config.enums.ShowConversationMoment;
 			import net.aihelp.exception.AIHelpInitException;
 			import net.aihelp.init.AIHelpSupport;
 			import net.aihelp.ui.listener.OnAIHelpInitializedCallback;
@@ -29,7 +30,7 @@
 				}
             }
             dependencies {
-            	implementation 'net.aihelp:android-aihelp-aar:4.2.+'
+            	implementation 'net.aihelp:android-aihelp-aar:4.3.+'
             }
         </insert>
     </buildGradleAdditions>
@@ -64,8 +65,8 @@
 			public void AIHelpSetOnAIHelpInitializedCallback() {
 				AIHelpSupport.setOnAIHelpInitializedCallback(new OnAIHelpInitializedCallback() {
 					@Override
-					public void onAIHelpInitialized() {
-						nativeOnAIHelpInitializedCallback(true, "");
+					public void onAIHelpInitialized(boolean isSuccess, String message) {
+						nativeOnAIHelpInitializedCallback(isSuccess, message);
 					}
 				});
 			}			
@@ -121,6 +122,10 @@
 					.setWelcomeMessage(welcomeMessage)
 					.build();
 				AIHelpSupport.show(apiConfig);
+			}
+
+			public void AIHelpShowSingleFaq(String faqId, int conversationMoment) {
+				AIHelpSupport.showSingleFAQ(faqId, ShowConversationMoment.fromValue(conversationMoment));
 			}
 
 			public void AIHelpUpdateUserInfo(String userId, String userName, String serverId, String userTags, String customData, boolean isSyncCrmInfo) {

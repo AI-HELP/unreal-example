@@ -57,6 +57,32 @@ void FIOSAIHelp::Show(FString EntranceId, FString WelcomeMessage)
 #endif
 }
 
+void FIOSAIHelp::ShowSingleFaq(FString FaqId, EAIHelpConversationMoment ConversationMoment)
+{
+#if PLATFORM_IOS
+	dispatch_async(dispatch_get_main_queue(), ^ {
+		AIHelpFAQShowConversationMoment moment = AIHelpFAQShowConversationMomentNever;
+		switch(ConversationMoment){
+			case 1:
+				moment = AIHelpFAQShowConversationMomentNever;
+				break;
+			case 2:
+				moment = AIHelpFAQShowConversationMomentAlways;
+				break;
+			case 3:
+				moment = AIHelpFAQShowConversationMomentOnlyInAnswerPage;
+				break;
+			case 4:
+				moment = AIHelpFAQShowConversationMomentAfterMarkingUnhelpful;
+				break;
+			default:
+				break;    
+		}
+		[AIHelpSupportSDK showSingleFAQ:FStringToNSString(FaqId) showConversationMoment:moment];
+	});
+#endif
+}
+
 void FIOSAIHelp::UpdateUserInfo(FString UserId, FString UserName, FString ServerId, FString UserTags,
                                 FString CustomDataInJsonFormat, bool IsSyncCrmInfo)
 {
@@ -189,12 +215,13 @@ void FIOSAIHelp::AdditionalSupportFor(EAIHelpPublishCountryOrRegion CountryOrReg
 #endif
 }
 
-void AIHelpOnInitializationCallBack()
+void AIHelpOnInitializationCallBack(bool isSuccess, const char* message)
 {
-	AsyncTask(ENamedThreads::GameThread, []()
+	AsyncTask(ENamedThreads::GameThread, [isSuccess, message]()
 	{
-		FAIHelpForUEModule::Get().GetAIHelp()->GetAIHelpInitializedDelegate().Broadcast();
-		UAIHelpFunctionLibrary::InitializedCallback.ExecuteIfBound();
+		auto fMessage = FString(UTF8_TO_TCHAR(message));
+		FAIHelpForUEModule::Get().GetAIHelp()->GetAIHelpInitializedDelegate().Broadcast(isSuccess, fMessage);
+		UAIHelpFunctionLibrary::InitializedCallback.ExecuteIfBound(isSuccess, fMessage);
 	});
 }
 

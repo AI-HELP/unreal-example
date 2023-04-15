@@ -18,6 +18,7 @@ public:
 
 	virtual void Init(FString AppKey, FString Domain, FString AppId, FString Language) override;
 	virtual void Show(FString EntranceId, FString WelcomeMessage) override;
+	virtual void ShowSingleFaq(FString FaqId, EAIHelpConversationMoment ConversationMoment) override;
 	virtual void UpdateUserInfo(FString UserId, FString UserName, FString ServerId, FString UserTags, FString CustomDataInJsonFormat, bool IsSyncCrmInfo) override;
 	virtual void ResetUserInfo() override;
 	virtual void UpdateSDKLanguage(FString Language) override;
@@ -41,6 +42,7 @@ protected:
 	static jmethodID AIHelpInit;
 	static jmethodID AIHelpRegisterCallbacks;
 	static jmethodID AIHelpShow;
+	static jmethodID AIHelpShowSingleFaq;
 	static jmethodID AIHelpUpdateUserInfo;
 	static jmethodID AIHelpResetUserInfo;
 	static jmethodID AIHelpUpdateSDKLanguage;

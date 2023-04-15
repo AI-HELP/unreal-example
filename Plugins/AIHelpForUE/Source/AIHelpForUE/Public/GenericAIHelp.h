@@ -1,7 +1,7 @@
 #pragma once
 #include "AIHelpDefine.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnAIHelpInitializedDelegate);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnAIHelpInitializedDelegate, bool, FString);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnUnreadMessageArrivedDelegate, int32);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnSpecificUrlClickedDelegate, FString);
 DECLARE_MULTICAST_DELEGATE(FOnSpecificFormSubmittedDelegate);
@@ -17,6 +17,7 @@ public:
 	virtual void Init(FString AppKey, FString Domain, FString AppId, FString Language);
 	virtual void SetOnAIHelpInitializedCallback(FOnAIHelpInitializedDelegate Delegate);
 	virtual void Show(FString EntranceId, FString WelcomeMessage);
+	virtual void ShowSingleFaq(FString faqId, EAIHelpConversationMoment ConversationMoment);
 	virtual void UpdateUserInfo(FString UserId, FString UserName, FString ServerId, FString UserTags, FString CustomDataInJsonFormat, bool IsSyncCrmInfo);
 	virtual void ResetUserInfo();
 	virtual void UpdateSDKLanguage(FString Language);

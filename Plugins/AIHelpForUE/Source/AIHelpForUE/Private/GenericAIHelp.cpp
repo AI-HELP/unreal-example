@@ -17,6 +17,11 @@ void FGenericAIHelp::Show(FString EntranceId, FString WelcomeMessage)
 	
 }
 
+void FGenericAIHelp::ShowSingleFaq(FString faqId, EAIHelpConversationMoment ConversationMoment)
+{
+	
+}
+
 void FGenericAIHelp::UpdateUserInfo(FString UserId, FString UserName, FString ServerId, FString UserTags,
 	FString CustomDataInJsonFormat, bool IsSyncCrmInfo)
 {

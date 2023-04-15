@@ -21,6 +21,11 @@ void UAIHelpFunctionLibrary::Show(FString EntranceId, FString WelcomeMessage)
 	FAIHelpForUEModule::Get().GetAIHelp()->Show(EntranceId, WelcomeMessage);
 }
 
+void UAIHelpFunctionLibrary::ShowSingleFaq(FString FaqId, EAIHelpConversationMoment ConversationMoment)
+{
+	FAIHelpForUEModule::Get().GetAIHelp()->ShowSingleFaq(FaqId, ConversationMoment);
+}
+
 void UAIHelpFunctionLibrary::UpdateUserInfo(FString UserId, FString UserName, FString ServerId, FString UserTags,
                                             FString CustomDataInJsonFormat, bool IsSyncCrmInfo)
 {

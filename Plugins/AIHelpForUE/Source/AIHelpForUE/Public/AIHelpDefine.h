@@ -21,3 +21,12 @@ enum EAIHelpPublishCountryOrRegion
 	China = 1,
 	India = 2
 };
+
+UENUM()
+enum EAIHelpConversationMoment
+{
+	Never = 1,
+	Always = 2,
+	OnlyInAnswerPage = 3,
+	AfterMarkingUnhelpful = 4,
+};

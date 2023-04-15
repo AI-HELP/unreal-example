@@ -9,7 +9,7 @@
 #include "AIHelpDefine.h"
 #include "AIHelpFunctionLibrary.generated.h"
 
-DECLARE_DYNAMIC_DELEGATE(FOnAIHelpInitializedCallback);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FOnAIHelpInitializedCallback, bool, isSuccess, FString, Message);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnUnreadMessageArrivedCallback, int32, UnreadCount);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnSpecificUrlClickedCallback, FString, Url);
 DECLARE_DYNAMIC_DELEGATE(FOnSpecificFormSubmittedCallback);
@@ -31,6 +31,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AIHelp")
 	static void Show(FString EntranceId, FString WelcomeMessage);
+
+	UFUNCTION(BlueprintCallable, Category = "AIHelp")
+	static void ShowSingleFaq(FString faqId, EAIHelpConversationMoment ConversationMoment);
 
 	UFUNCTION(BlueprintCallable, Category = "AIHelp")
 	static void UpdateUserInfo(FString UserId, FString UserName, FString ServerId, FString UserTags,

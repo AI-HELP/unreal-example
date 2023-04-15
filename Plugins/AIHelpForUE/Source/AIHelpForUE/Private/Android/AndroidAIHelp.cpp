@@ -8,6 +8,7 @@
 
 jmethodID FAndroidAIHelp::AIHelpInit;
 jmethodID FAndroidAIHelp::AIHelpShow;
+jmethodID FAndroidAIHelp::AIHelpShowSingleFaq;
 jmethodID FAndroidAIHelp::AIHelpUpdateUserInfo;
 jmethodID FAndroidAIHelp::AIHelpResetUserInfo;
 jmethodID FAndroidAIHelp::AIHelpUpdateSDKLanguage;
@@ -30,8 +31,8 @@ JNI_METHOD void Java_com_epicgames_ue4_GameActivity_nativeOnAIHelpInitializedCal
 	auto message = FJavaHelper::FStringFromParam(jenv, msg);
 	AsyncTask(ENamedThreads::GameThread, [bSuccess,message]()
 	{
-		FAIHelpForUEModule::Get().GetAIHelp()->GetAIHelpInitializedDelegate().Broadcast();
-		UAIHelpFunctionLibrary::InitializedCallback.ExecuteIfBound();
+		FAIHelpForUEModule::Get().GetAIHelp()->GetAIHelpInitializedDelegate().Broadcast(bSuccess, message);
+		UAIHelpFunctionLibrary::InitializedCallback.ExecuteIfBound(bSuccess, message);
 	});
 }
 
@@ -87,6 +88,7 @@ FAndroidAIHelp::FAndroidAIHelp()
 	{
 		AIHelpInit = FJavaWrapper::FindMethod(Env, FJavaWrapper::GameActivityClassID, "AIHelpInit", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V", false);
 		AIHelpShow = FJavaWrapper::FindMethod(Env, FJavaWrapper::GameActivityClassID, "AIHelpShow", "(Ljava/lang/String;Ljava/lang/String;)V", false);
+		AIHelpShowSingleFaq = FJavaWrapper::FindMethod(Env, FJavaWrapper::GameActivityClassID, "AIHelpShowSingleFaq", "(Ljava/lang/String;I)V", false);
 		AIHelpUpdateUserInfo = FJavaWrapper::FindMethod(Env, FJavaWrapper::GameActivityClassID, "AIHelpUpdateUserInfo", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V", false);
 		AIHelpResetUserInfo = FJavaWrapper::FindMethod(Env, FJavaWrapper::GameActivityClassID, "AIHelpResetUserInfo", "()V", false);
 		AIHelpUpdateSDKLanguage = FJavaWrapper::FindMethod(Env, FJavaWrapper::GameActivityClassID, "AIHelpUpdateSDKLanguage", "(Ljava/lang/String;)V", false);
@@ -134,6 +136,17 @@ void FAndroidAIHelp::Show(FString entranceId, FString welcomeMessage)
 		auto welcomeMessageJ = FJavaHelper::ToJavaString(Env, welcomeMessage);
 		FJavaWrapper::CallVoidMethod(Env, FJavaWrapper::GameActivityThis, AIHelpShow,
 			*entranceIdJ, *welcomeMessageJ
+		);
+	}
+}
+
+void FAndroidAIHelp::ShowSingleFaq(FString FaqId, EAIHelpConversationMoment ConversationMoment)
+{
+	if (JNIEnv* Env = FAndroidApplication::GetJavaEnv())
+	{
+		auto FaqIdJ = FJavaHelper::ToJavaString(Env, FaqId);
+		FJavaWrapper::CallVoidMethod(Env, FJavaWrapper::GameActivityThis,
+			AIHelpShowSingleFaq, *FaqIdJ, ConversationMoment
 		);
 	}
 }
